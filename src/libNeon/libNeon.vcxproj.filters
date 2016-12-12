@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="libNeon.h" />
+    <ClInclude Include="libNeonCommon.h" />
+    <ClInclude Include="GraphicsDevice.h" />
+    <ClInclude Include="ResourceCache.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libNeon.cpp" />
+    <ClCompile Include="GraphicsDevice.cpp" />
+    <ClCompile Include="ResourceCache.cpp" />
+  </ItemGroup>
+</Project>

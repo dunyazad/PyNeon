@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppNeonWPF", "src\AppNeonWPF\AppNeonWPF.csproj", "{4B1A1288-1353-481F-8C91-9FE0358FE8A1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539} = {A64B0C3B-7FCB-4DD8-B561-42229097B539}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libNeonCLR", "src\libNeonCLR\libNeonCLR.vcxproj", "{A64B0C3B-7FCB-4DD8-B561-42229097B539}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C} = {E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libNeon", "src\libNeon\libNeon.vcxproj", "{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppNeonWinform", "src\AppNeonWinform\AppNeonWinform.csproj", "{77674D01-B390-44C4-81C9-08D5D11949FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Debug|x64.ActiveCfg = Debug|x64
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Debug|x64.Build.0 = Debug|x64
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Debug|x86.ActiveCfg = Debug|x86
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Debug|x86.Build.0 = Debug|x86
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Release|x64.ActiveCfg = Release|x64
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Release|x64.Build.0 = Release|x64
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Release|x86.ActiveCfg = Release|x86
+		{4B1A1288-1353-481F-8C91-9FE0358FE8A1}.Release|x86.Build.0 = Release|x86
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Debug|x64.ActiveCfg = Debug|x64
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Debug|x64.Build.0 = Debug|x64
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Debug|x86.ActiveCfg = Debug|Win32
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Debug|x86.Build.0 = Debug|Win32
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Release|x64.ActiveCfg = Release|x64
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Release|x64.Build.0 = Release|x64
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Release|x86.ActiveCfg = Release|Win32
+		{A64B0C3B-7FCB-4DD8-B561-42229097B539}.Release|x86.Build.0 = Release|Win32
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Debug|x64.ActiveCfg = Debug|x64
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Debug|x64.Build.0 = Debug|x64
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Debug|x86.ActiveCfg = Debug|Win32
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Debug|x86.Build.0 = Debug|Win32
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Release|x64.ActiveCfg = Release|x64
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Release|x64.Build.0 = Release|x64
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Release|x86.ActiveCfg = Release|Win32
+		{E287B5FC-5B5D-4F25-BF1E-04AE8909DC0C}.Release|x86.Build.0 = Release|Win32
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Debug|x64.ActiveCfg = Debug|x64
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Debug|x64.Build.0 = Debug|x64
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Debug|x86.ActiveCfg = Debug|x86
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Debug|x86.Build.0 = Debug|x86
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x64.ActiveCfg = Release|x64
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x64.Build.0 = Release|x64
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x86.ActiveCfg = Release|x86
+		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
