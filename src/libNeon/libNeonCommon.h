@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable: 4819)
+
 #include <iostream>
 #include <string>
 #include <map>
@@ -14,6 +16,9 @@
 #include <thread>
 #endif
 using namespace std;
+
+#include <filesystem>
+using namespace std::tr2::sys;
 
 #include <Windows.h>
 #ifdef _M_CEE
@@ -36,18 +41,20 @@ using namespace std;
 #pragma comment(lib, "glu32.lib")
 
 #include <glm/glm.hpp>
-
-#include <FTGL/ftgl.h>
-#ifdef _DEBUG
-#pragma comment(lib, "ftgl_D.lib")
-#else
-#pragma comment(lib, "ftgl.lib")
-#endif
 #endif
 
 typedef unsigned char byte;
 
 
+
+
+
+
+
+std::string wcs_to_mbs(const std::wstring& wstr);
+std::wstring mbs_to_wcs(const std::string& astr);
+std::wstring mbs_to_wcs2(std::string const& str, std::locale const& loc = std::locale());
+std::string wcs_to_mbs2(std::wstring const& str, std::locale const& loc = std::locale());
 
 
 

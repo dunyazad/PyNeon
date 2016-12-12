@@ -68,6 +68,10 @@ namespace ArtificialNature {
 			return S_FALSE;								// Return FALSE
 		}
 
+		cout << "XDPI : " << ::GetDeviceCaps(m_hDC, LOGPIXELSX) << endl;
+		cout << "YDPI : " << ::GetDeviceCaps(m_hDC, LOGPIXELSY) << endl;
+		
+
 		// Initialize GLEW
 		GLenum result = glewInit();
 		if (result != GLEW_OK)

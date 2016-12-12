@@ -134,12 +134,15 @@
     <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="libNeon.h" />
     <ClInclude Include="libNeonCommon.h" />
-    <ClInclude Include="ResourceCache.h" />
+    <ClInclude Include="Resource\Font.h" />
+    <ClInclude Include="Resource\ResourceCache.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsDevice.cpp" />
     <ClCompile Include="libNeon.cpp" />
-    <ClCompile Include="ResourceCache.cpp" />
+    <ClCompile Include="libNeonCommon.cpp" />
+    <ClCompile Include="Resource\Font.cpp" />
+    <ClCompile Include="Resource\ResourceCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

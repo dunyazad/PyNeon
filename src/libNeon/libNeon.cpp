@@ -11,7 +11,7 @@ namespace ArtificialNature {
 	{
 	}
 
-	FTGLPixmapFont font("C:\\Windows\\Fonts\\gulim.ttc");
+	//FTGLPixmapFont font("C:\\Windows\\Fonts\\gulim.ttc");
 	void Neon::Setup(HWND hWnd, int width, int height)
 	{
 		m_pGraphicsDevice = new GraphicsDevice(hWnd, width, height);
@@ -20,8 +20,17 @@ namespace ArtificialNature {
 
 
 
+		//ResourceCache r;
+		////r.GetPixmapFont("C:\\Windows\\Fonts\\gulim.ttc");
+		////r.GetPixmapFont("../../../res/Fonts/gulim.ttc");
+		////path p1 = "../../../res/Fonts/gulim.ttc";
+		////path p2 = "E:\\Workspace\\Neon\\res\\fonts\\gulim.ttc";
 
 
+		//if (p1.compare(p2))
+		//	cout << "OK" << endl;
+		//else
+		//	cout << "No" << endl;
 		
 	}
 
@@ -34,8 +43,6 @@ namespace ArtificialNature {
 	int Neon::Frame()
 	{
 		if (!m_pGraphicsDevice) return 0;
-
-		cout << "Frame()" << endl;
 
 		m_pGraphicsDevice->Clear();
 
@@ -67,16 +74,16 @@ namespace ArtificialNature {
 
 
 
-		// Create a pixmap font from a TrueType file.
+		//// Create a pixmap font from a TrueType file.
 
 
-		// If something went wrong, bail out.
-		if (font.Error())
-			return 16;
+		//// If something went wrong, bail out.
+		//if (font.Error())
+		//	return 16;
 
-		// Set the font size and render a small text.
-		font.FaceSize(72);
-		font.Render(L"한글 입력", -1, FTPoint(100, 100));
+		//// Set the font size and render a small text.
+		//font.FaceSize(72);
+		//font.Render(L"한글 입력", -1, FTPoint(100, 100));
 
 
 

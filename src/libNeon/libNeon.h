@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libNeon/libNeonCommon.h>
+#include <libNeon/Resource/ResourceCache.h>
 
 namespace ArtificialNature {
 

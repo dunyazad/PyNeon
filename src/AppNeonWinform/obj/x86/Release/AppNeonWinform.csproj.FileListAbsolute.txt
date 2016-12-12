@@ -1,9 +1,0 @@
-E:\Workspace\Neon\bin\x86\Release\AppNeonWinform.exe.config
-E:\Workspace\Neon\bin\x86\Release\AppNeonWinform.exe
-E:\Workspace\Neon\bin\x86\Release\AppNeonWinform.pdb
-E:\Workspace\Neon\src\AppNeonWinform\obj\x86\Release\AppNeonWinform.csprojResolveAssemblyReference.cache
-E:\Workspace\Neon\src\AppNeonWinform\obj\x86\Release\AppNeonWinform.FormMain.resources
-E:\Workspace\Neon\src\AppNeonWinform\obj\x86\Release\AppNeonWinform.Properties.Resources.resources
-E:\Workspace\Neon\src\AppNeonWinform\obj\x86\Release\AppNeonWinform.csproj.GenerateResource.Cache
-E:\Workspace\Neon\src\AppNeonWinform\obj\x86\Release\AppNeonWinform.exe
-E:\Workspace\Neon\src\AppNeonWinform\obj\x86\Release\AppNeonWinform.pdb
