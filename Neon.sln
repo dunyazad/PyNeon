@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libNeon", "src\libNeon\libN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppNeonWinform", "src\AppNeonWinform\AppNeonWinform.csproj", "{77674D01-B390-44C4-81C9-08D5D11949FE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppNeonWin32", "src\AppNeonWin32\AppNeonWin32.vcxproj", "{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -57,6 +59,14 @@ Global
 		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x64.Build.0 = Release|x64
 		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x86.ActiveCfg = Release|x86
 		{77674D01-B390-44C4-81C9-08D5D11949FE}.Release|x86.Build.0 = Release|x86
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Debug|x64.ActiveCfg = Debug|x64
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Debug|x64.Build.0 = Debug|x64
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Debug|x86.ActiveCfg = Debug|Win32
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Debug|x86.Build.0 = Debug|Win32
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Release|x64.ActiveCfg = Release|x64
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Release|x64.Build.0 = Release|x64
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Release|x86.ActiveCfg = Release|Win32
+		{54DC0B0C-DE42-46F1-BBD3-DDAACB703AFE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
