@@ -8,15 +8,17 @@ namespace ArtificialNature {
 	class ResourceCache
 	{
 	public:
-		ResourceCache();
-		~ResourceCache();
-
-		Font* GetPixmapFont(path filePath);
+		static void Terminate();
+		static Font* GetPixmapFont(path filePath);
 
 	private:
-		wstring m_resourceRootPath = L"../../../res";
+		static ResourceCache* s_pInstance;
+		ResourceCache();
+		~ResourceCache();
+		
+		static wstring s_resourceRootPath;
 
-		map<wstring, Font*> m_fontCache;
+		static map<path, Font*> s_fontCache;
 	};
 
 }

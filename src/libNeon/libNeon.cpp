@@ -9,6 +9,7 @@ namespace ArtificialNature {
 
 	Neon::~Neon()
 	{
+		ResourceCache::Terminate();
 	}
 
 	//FTGLPixmapFont font("C:\\Windows\\Fonts\\gulim.ttc");
@@ -20,11 +21,8 @@ namespace ArtificialNature {
 
 
 
-		//ResourceCache r;
-		////r.GetPixmapFont("C:\\Windows\\Fonts\\gulim.ttc");
-		////r.GetPixmapFont("../../../res/Fonts/gulim.ttc");
-		////path p1 = "../../../res/Fonts/gulim.ttc";
-		////path p2 = "E:\\Workspace\\Neon\\res\\fonts\\gulim.ttc";
+		Font* pFont = ResourceCache::GetPixmapFont("C:\\Windows\\Fonts\\gulim.ttc");
+		pFont->SetFaceSize(12);
 
 
 		//if (p1.compare(p2))
@@ -73,19 +71,16 @@ namespace ArtificialNature {
 
 
 
+		Font* pFont = ResourceCache::GetPixmapFont("C:\\Windows\\Fonts\\gulim.ttc");
+		wstringstream wss;
+		wss << L"한글 입력, " << m_fRotationAngle;
 
-		//// Create a pixmap font from a TrueType file.
-
-
-		//// If something went wrong, bail out.
-		//if (font.Error())
-		//	return 16;
-
-		//// Set the font size and render a small text.
-		//font.FaceSize(72);
-		//font.Render(L"한글 입력", -1, FTPoint(100, 100));
-
-
+		if (pFont)
+		{
+			//pFont->Render(L"한글 입력", -1, 100, 100);
+			pFont->Render(wss.str(), -1, 100, 100);
+		}
+		
 
 
 

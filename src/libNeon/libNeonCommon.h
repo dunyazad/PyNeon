@@ -9,6 +9,7 @@
 #include <queue>
 #include <deque>
 #include <vector>
+#include <sstream>
 
 #include <algorithm>
 #include <chrono>
