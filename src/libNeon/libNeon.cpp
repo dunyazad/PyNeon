@@ -85,8 +85,6 @@ namespace ArtificialNature {
 
 
 
-		glFlush();
-
 		m_pGraphicsDevice->Present();
 
 		m_fRotationAngle += 1.0f;

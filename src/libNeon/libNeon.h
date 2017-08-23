@@ -2,6 +2,7 @@
 
 #include <libNeon/libNeonCommon.h>
 #include <libNeon/Resource/ResourceCache.h>
+#include <libNeon/Scene/Scene.h>
 
 namespace ArtificialNature {
 
@@ -19,6 +20,8 @@ namespace ArtificialNature {
 
 	private:
 		GraphicsDevice* m_pGraphicsDevice = nullptr;
+
+
 	};
 
 }
