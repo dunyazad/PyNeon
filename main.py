@@ -6,34 +6,6 @@ from TextureLoader import load_texture
 
 shader = None
 
-vertex_src = """
-# version 330
-layout(location = 0) in vec3 a_position;
-layout(location = 1) in vec2 a_texture;
-uniform mat4 model;
-uniform mat4 projection;
-uniform mat4 view;
-out vec3 v_color;
-out vec2 v_texture;
-void main()
-{
-    gl_Position = projection * view * model * vec4(a_position, 1.0);
-    v_texture = a_texture;
-}
-"""
-
-fragment_src = """
-# version 330
-in vec2 v_texture;
-out vec4 out_color;
-uniform sampler2D s_texture;
-void main()
-{
-    out_color = texture(s_texture, v_texture);
-}
-"""
-
-
 # glfw callback functions
 def window_resize(window, width, height):
     global shader
@@ -66,48 +38,11 @@ glfw.set_window_size_callback(window, window_resize)
 glfw.make_context_current(window)
 
 geometry = NGeometry()
-
-geometry.vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
-             0.5, -0.5,  0.5, 1.0, 0.0,
-             0.5,  0.5,  0.5, 1.0, 1.0,
-            -0.5,  0.5,  0.5, 0.0, 1.0,
-
-            -0.5, -0.5, -0.5, 0.0, 0.0,
-             0.5, -0.5, -0.5, 1.0, 0.0,
-             0.5,  0.5, -0.5, 1.0, 1.0,
-            -0.5,  0.5, -0.5, 0.0, 1.0,
-
-             0.5, -0.5, -0.5, 0.0, 0.0,
-             0.5,  0.5, -0.5, 1.0, 0.0,
-             0.5,  0.5,  0.5, 1.0, 1.0,
-             0.5, -0.5,  0.5, 0.0, 1.0,
-
-            -0.5,  0.5, -0.5, 0.0, 0.0,
-            -0.5, -0.5, -0.5, 1.0, 0.0,
-            -0.5, -0.5,  0.5, 1.0, 1.0,
-            -0.5,  0.5,  0.5, 0.0, 1.0,
-
-            -0.5, -0.5, -0.5, 0.0, 0.0,
-             0.5, -0.5, -0.5, 1.0, 0.0,
-             0.5, -0.5,  0.5, 1.0, 1.0,
-            -0.5, -0.5,  0.5, 0.0, 1.0,
-
-             0.5, 0.5, -0.5, 0.0, 0.0,
-            -0.5, 0.5, -0.5, 1.0, 0.0,
-            -0.5, 0.5,  0.5, 1.0, 1.0,
-             0.5, 0.5,  0.5, 0.0, 1.0]
-
-geometry.indices = [ 0,  1,  2,  2,  3,  0,
-            4,  5,  6,  6,  7,  4,
-            8,  9, 10, 10, 11,  8,
-           12, 13, 14, 14, 15, 12,
-           16, 17, 18, 18, 19, 16,
-           20, 21, 22, 22, 23, 20]
+geometry.InitializeCube()
 
 vertices = np.array(geometry.vertices, dtype=np.float32)
+uvs = np.array(geometry.uvs, dtype=np.float32)
 indices = np.array(geometry.indices, dtype=np.uint32)
-
-shader = NShader(vertex_src, fragment_src)
 
 VAO = NVertexArrayObject()
 VAO.Bind()
@@ -115,27 +50,40 @@ VAO.Bind()
 VBO = NVertexBufferObject()
 VBO.Bind()
 VBO.BufferData(vertices.nbytes, vertices)
+glEnableVertexAttribArray(0)
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+
+UVBO = NVertexBufferObject()
+UVBO.Bind()
+UVBO.BufferData(uvs.nbytes, uvs)
+glEnableVertexAttribArray(1)
+glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
 
 EBO = NElementBufferObject()
 EBO.Bind()
 EBO.BufferData(indices.nbytes, indices)
 
-glEnableVertexAttribArray(0)
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(0))
+vertex_src = open("shaders/default.vs")
+fragment_src = open("shaders/default.fs")
+shader = NShader(vertex_src, fragment_src)
 
-glEnableVertexAttribArray(1)
-glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(12))
+texture_cube1 = NTexture()
+texture_cube1.LoadFromFile("textures/crate.jpg")
+material_cube1 = NMaterial()
+material_cube1.SetShader(shader)
+material_cube1.SetTexture(texture_cube1)
 
-textures = [NTexture(), NTexture(), NTexture()]
+texture_cube2 = NTexture()
+texture_cube2.LoadFromFile("textures/cat.png")
+material_cube2 = NMaterial()
+material_cube2.SetShader(shader)
+material_cube2.SetTexture(texture_cube2)
 
-cube1_texture = NTexture()
-cube1_texture.LoadFromFile("textures/crate.jpg")
-
-cube2_texture = NTexture()
-cube2_texture.LoadFromFile("textures/cat.png")
-
-cube3_texture = NTexture()
-cube3_texture.LoadFromFile("textures/smiley.png")
+texture_cube3 = NTexture()
+texture_cube3.LoadFromFile("textures/smiley.png")
+material_cube3 = NMaterial()
+material_cube3.SetShader(shader)
+material_cube3.SetTexture(texture_cube3)
 
 glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)
@@ -183,21 +131,21 @@ while not glfw.window_should_close(window):
     # model = pyrr.matrix44.multiply(rotation, cube1)
     model = glm.translate(glm.mat4(), glm.vec3(1, 0, 0)) * rotation
 
-    cube1_texture.Bind()
+    material_cube1.Use()
     shader.UniformMatrix4fv("model", glm.value_ptr(model))
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
 
     # model = pyrr.matrix44.multiply(rot_x, cube2)
     model = glm.rotate(cube2, 0.5 * glfw.get_time(), glm.vec3(1, 0, 0))
 
-    cube2_texture.Bind()
+    material_cube2.Use()
     shader.UniformMatrix4fv("model", glm.value_ptr(model))
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
 
     # model = pyrr.matrix44.multiply(rot_y, cube3)
     model = glm.rotate(cube3, 0.8 * glfw.get_time(), glm.vec3(0, 1, 0))
 
-    cube3_texture.Bind()
+    material_cube3.Use()
     shader.UniformMatrix4fv("model", glm.value_ptr(model))
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
 
