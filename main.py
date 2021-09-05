@@ -1,3 +1,4 @@
+from Neon.NGeometry import NGeometry
 from Neon.NVertexArrayObject import NVertexArrayObject
 from Neon.Neon import *
 
@@ -64,7 +65,9 @@ glfw.set_window_size_callback(window, window_resize)
 # make the context current
 glfw.make_context_current(window)
 
-vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
+geometry = NGeometry()
+
+geometry.vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
              0.5, -0.5,  0.5, 1.0, 0.0,
              0.5,  0.5,  0.5, 1.0, 1.0,
             -0.5,  0.5,  0.5, 0.0, 1.0,
@@ -94,15 +97,15 @@ vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
             -0.5, 0.5,  0.5, 1.0, 1.0,
              0.5, 0.5,  0.5, 0.0, 1.0]
 
-indices = [ 0,  1,  2,  2,  3,  0,
+geometry.indices = [ 0,  1,  2,  2,  3,  0,
             4,  5,  6,  6,  7,  4,
             8,  9, 10, 10, 11,  8,
            12, 13, 14, 14, 15, 12,
            16, 17, 18, 18, 19, 16,
            20, 21, 22, 22, 23, 20]
 
-vertices = np.array(vertices, dtype=np.float32)
-indices = np.array(indices, dtype=np.uint32)
+vertices = np.array(geometry.vertices, dtype=np.float32)
+indices = np.array(geometry.indices, dtype=np.uint32)
 
 shader = NShader(vertex_src, fragment_src)
 
