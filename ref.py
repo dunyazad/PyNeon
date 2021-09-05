@@ -1,9 +1,10 @@
-from Neon.NVertexArrayObject import NVertexArrayObject
-from Neon.Neon import *
-
+import glfw
+from OpenGL.GL import *
+from OpenGL.GL.shaders import compileProgram, compileShader
+import numpy as np
+import pyrr
 from TextureLoader import load_texture
 
-shader = None
 
 vertex_src = """
 # version 330
@@ -35,20 +36,16 @@ void main()
 
 # glfw callback functions
 def window_resize(window, width, height):
-    global shader
-
     glViewport(0, 0, width, height)
-    # projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, 0.1, 100)
-    projection = glm.perspective(45, width / height, 0.1, 100)
-    # glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm.value_ptr(projection))
-    shader.UniformMatrix4fv("projection", glm.value_ptr(projection))
+    projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, 0.1, 100)
+    glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
 
 # initializing glfw library
 if not glfw.init():
     raise Exception("glfw can not be initialized!")
 
 # creating the window
-window = glfw.create_window(1280, 720, "Neon window", None, None)
+window = glfw.create_window(1280, 720, "My OpenGL window", None, None)
 
 # check if window was created
 if not window:
@@ -104,18 +101,17 @@ indices = [ 0,  1,  2,  2,  3,  0,
 vertices = np.array(vertices, dtype=np.float32)
 indices = np.array(indices, dtype=np.uint32)
 
-shader = NShader(vertex_src, fragment_src)
+shader = compileProgram(compileShader(vertex_src, GL_VERTEX_SHADER), compileShader(fragment_src, GL_FRAGMENT_SHADER))
 
-VAO = NVertexArrayObject()
-VAO.Bind()
+# Vertex Buffer Object
+VBO = glGenBuffers(1)
+glBindBuffer(GL_ARRAY_BUFFER, VBO)
+glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
 
-VBO = NVertexBufferObject()
-VBO.Bind()
-VBO.BufferData(vertices.nbytes, vertices)
-
-EBO = NElementBufferObject()
-EBO.Bind()
-EBO.BufferData(indices.nbytes, indices)
+# Element Buffer Object
+EBO = glGenBuffers(1)
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO)
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
 
 glEnableVertexAttribArray(0)
 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(0))
@@ -123,44 +119,33 @@ glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_
 glEnableVertexAttribArray(1)
 glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertices.itemsize * 5, ctypes.c_void_p(12))
 
-textures = [NTexture(), NTexture(), NTexture()]
+texture = glGenTextures(3)
 
-cube1_texture = NTexture()
-cube1_texture.LoadFromFile("textures/crate.jpg")
+cube1_texture = load_texture("textures/crate.jpg", texture[0])
+cube2_texture = load_texture("textures/cat.png", texture[1])
+cube3_texture = load_texture("textures/smiley.png", texture[2])
 
-cube2_texture = NTexture()
-cube2_texture.LoadFromFile("textures/cat.png")
-
-cube3_texture = NTexture()
-cube3_texture.LoadFromFile("textures/smiley.png")
-
+glUseProgram(shader)
 glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)
 glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
-# projection = pyrr.matrix44.create_perspective_projection_matrix(45, 1280/720, 0.1, 100)
-projection = glm.perspective(glm.radians(45), 1280/720, 0.1, 100)
-# cube1 = pyrr.matrix44.create_from_translation(pyrr.Vector3([1, 0, 0]))
-cube1 = glm.translate(glm.mat4(), glm.vec3(1, 0, 0))
-# cube2 = pyrr.matrix44.create_from_translation(pyrr.Vector3([-1, 0, 0]))
-cube2 = glm.translate(glm.mat4(), glm.vec3(-1, 0, 0))
-# cube3 = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 1, -3]))
-cube3 = glm.translate(glm.mat4(), glm.vec3(0, 1, -3))
+projection = pyrr.matrix44.create_perspective_projection_matrix(45, 1280/720, 0.1, 100)
+cube1 = pyrr.matrix44.create_from_translation(pyrr.Vector3([1, 0, 0]))
+cube2 = pyrr.matrix44.create_from_translation(pyrr.Vector3([-1, 0, 0]))
+cube3 = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 1, -3]))
 
 # eye, target, up
-# view = pyrr.matrix44.create_look_at(pyrr.Vector3([0, 0, 3]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
-view = glm.lookAt(glm.vec3(0, 0, 3), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0))
+view = pyrr.matrix44.create_look_at(pyrr.Vector3([0, 0, 3]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
 
-model = glm.mat4()
+model_loc = glGetUniformLocation(shader, "model")
+proj_loc = glGetUniformLocation(shader, "projection")
+view_loc = glGetUniformLocation(shader, "view")
 
-shader.Use()
+glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
 
-shader.UniformMatrix4fv("projection", glm.value_ptr(projection))
-shader.UniformMatrix4fv("view", glm.value_ptr(view))
-shader.UniformMatrix4fv("model", glm.value_ptr(model))
-
-shader.Unuse()
+glUniformMatrix4fv(view_loc, 1, GL_FALSE, view)
 
 # the main application loop
 while not glfw.window_should_close(window):
@@ -168,37 +153,27 @@ while not glfw.window_should_close(window):
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-    shader.Use()
+    rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfw.get_time())
+    rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfw.get_time())
 
-    # rot_x = pyrr.Matrix44.from_x_rotation(0.5 * glfw.get_time())
-    rot_x = glm.rotate(glm.mat4(), 0.5 * glfw.get_time(), glm.vec3(1, 0, 0))
-    # rot_y = pyrr.Matrix44.from_y_rotation(0.8 * glfw.get_time())
-    rot_y = glm.rotate(glm.mat4(), 0.8 * glfw.get_time(), glm.vec3(0, 1, 0))
+    rotation = pyrr.matrix44.multiply(rot_x, rot_y)
+    model = pyrr.matrix44.multiply(rotation, cube1)
 
-    # rotation = pyrr.matrix44.multiply(rot_x, rot_y)
-    rotation = rot_x * rot_y
-    # model = pyrr.matrix44.multiply(rotation, cube1)
-    model = glm.translate(glm.mat4(), glm.vec3(1, 0, 0)) * rotation
-
-    cube1_texture.Bind()
-    shader.UniformMatrix4fv("model", glm.value_ptr(model))
+    glBindTexture(GL_TEXTURE_2D, texture[0])
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
 
-    # model = pyrr.matrix44.multiply(rot_x, cube2)
-    model = glm.rotate(cube2, 0.5 * glfw.get_time(), glm.vec3(1, 0, 0))
+    model = pyrr.matrix44.multiply(rot_x, cube2)
 
-    cube2_texture.Bind()
-    shader.UniformMatrix4fv("model", glm.value_ptr(model))
+    glBindTexture(GL_TEXTURE_2D, texture[1])
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
 
-    # model = pyrr.matrix44.multiply(rot_y, cube3)
-    model = glm.rotate(cube3, 0.8 * glfw.get_time(), glm.vec3(0, 1, 0))
+    model = pyrr.matrix44.multiply(rot_y, cube3)
 
-    cube3_texture.Bind()
-    shader.UniformMatrix4fv("model", glm.value_ptr(model))
+    glBindTexture(GL_TEXTURE_2D, texture[2])
+    glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
     glDrawElements(GL_TRIANGLES, len(indices), GL_UNSIGNED_INT, None)
-
-    shader.Unuse()
 
     glfw.swap_buffers(window)
 
