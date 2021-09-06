@@ -1,6 +1,6 @@
 from .NCommon import *
 
-class NSceneNode:
+class NSceneNode():
     def __init__(self, sceneLayer, name):
         self.sceneLayer = sceneLayer
         self.name = name
@@ -54,7 +54,11 @@ class NSceneNode:
 
     def Render(self):
         for material, geometry in self.renderDatas:
-            geometry.Draw(material, projection = glm.perspective(glm.radians(45), 1280/720, 0.1, 100), view = glm.lookAt(glm.vec3(0, 0, 3), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0)), model = self.localTransform)
+            geometry.Draw(
+                material,
+                self.sceneLayer.GetCameraNode().GetProjectionMatrix(),
+                self.sceneLayer.GetCameraNode().GetViewMatrix(),
+                self.absoluteTransform)
 
         for child in self.children:
             child.Render()
