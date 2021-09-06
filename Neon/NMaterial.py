@@ -8,6 +8,9 @@ class NMaterial():
         self.shader = None
         self.texture = None
 
+    def GetShader(self):
+        return self.shader
+
     def SetShader(self, shader):
         self.shader = shader
 
@@ -20,3 +23,10 @@ class NMaterial():
 
         if self.texture is not None:
             self.texture.Bind()
+    
+    def Unuse(self):
+        if self.shader is not None:
+            self.shader.Unuse()
+
+        if self.texture is not None:
+            self.texture.Unbind()
