@@ -1,4 +1,5 @@
 from .NCommon import *
+from .NRenderer import *
 
 class NSceneNode():
     def __init__(self, sceneLayer, name):
@@ -7,8 +8,8 @@ class NSceneNode():
         self.renderDatas = []
         self.parent = None
         self.children = []
-        self.localTransform = None
-        self.absoluteTransform = None
+        self.localTransform = glm.mat4(1)
+        self.absoluteTransform = glm.mat4(1)
 
     def GetName(self):
         return self.name
@@ -46,19 +47,31 @@ class NSceneNode():
     def SetLocalTransform(self, m):
         self.localTransform = m
 
+    def GetAbsoluteTransform(self):
+        return self.absoluteTransform
+
     def Update(self, timeDelta):
-        self.absoluteTransform = self.localTransform
+        if self.parent is None:
+            self.absoluteTransform = self.localTransform
+        else:
+            self.absoluteTransform = self.parent.absoluteTransform * self.localTransform
 
         for child in self.children:
             child.Update(timeDelta)
 
-    def Render(self):
+    def Render(self, renderer):
         for material, geometry in self.renderDatas:
             geometry.Draw(
                 material,
                 self.sceneLayer.GetCameraNode().GetProjectionMatrix(),
                 self.sceneLayer.GetCameraNode().GetViewMatrix(),
                 self.absoluteTransform)
+            # renderer.SetRenderData(
+            #     material,
+            #      geometry,
+            #       self.sceneLayer.GetCameraNode().GetProjectionMatrix(),
+            #     self.sceneLayer.GetCameraNode().GetViewMatrix(),
+            #     self.absoluteTransform)
 
         for child in self.children:
-            child.Render()
+            child.Render(renderer)

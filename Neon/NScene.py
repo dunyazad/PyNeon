@@ -16,6 +16,6 @@ class NScene:
         for name, sceneLayer in self.sceneLayers.items():
             sceneLayer.Update(timeDelta)
 
-    def Render(self):
+    def Render(self, renderer):
         for name, sceneLayer in self.sceneLayers.items():
-            sceneLayer.Render()
+            sceneLayer.Render(renderer)

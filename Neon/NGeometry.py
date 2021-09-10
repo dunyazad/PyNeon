@@ -10,7 +10,7 @@ class NGeometry():
         self.uvs = []
         self.colors = []
         self.indices = []
-
+        self.instanceTransforms = None
         self.vertexArrayObject = None
         self.vertexBuffer = None
         self.normalBuffer = None
@@ -32,6 +32,26 @@ class NGeometry():
 
     def SetIndices(self, indices):
         self.indices = indices
+
+    def SetInstanceTransforms(self, transforms):
+        self.instanceTransforms = glm.array.zeros(len(transforms), glm.mat4)
+        for i, m in enumerate(transforms):
+            self.instanceTransforms[i] = m
+        self.modelMatrixBuffer = NVertexBufferObject()
+        self.modelMatrixBuffer.Bind()
+        self.modelMatrixBuffer.BufferData(self.instanceTransforms.nbytes, self.instanceTransforms.ptr)
+        glEnableVertexAttribArray(5)
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(0))
+        glEnableVertexAttribArray(6)
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(glm.sizeof(glm.vec4)))
+        glEnableVertexAttribArray(7)
+        glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(2 * glm.sizeof(glm.vec4)))
+        glEnableVertexAttribArray(8)
+        glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(3 * glm.sizeof(glm.vec4)))
+        glVertexAttribDivisor(5, 1)
+        glVertexAttribDivisor(6, 1)
+        glVertexAttribDivisor(7, 1)
+        glVertexAttribDivisor(8, 1)
 
     def BuildRenderData(self):
         vertices = np.array(self.vertices, dtype=np.float32)
@@ -107,37 +127,92 @@ class NGeometry():
         
         self.vertexArrayObject.Unbind()
 
-    def InitializeCube(self):
+    def DrawInstanced(self, material, projection, view, model):
+        self.vertexArrayObject.Bind()
+
+        # self.vertexBuffer.Bind()
+        # glEnableVertexAttribArray(0)
+        # glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+
+        # self.normalBuffer.Bind()
+        # glEnableVertexAttribArray(1)
+        # glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+
+        # self.uvBuffer.Bind()
+        # glEnableVertexAttribArray(2)
+        # glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+
+        # self.colorBuffer.Bind()
+        # glEnableVertexAttribArray(3)
+        # glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+
+        # self.indexBuffer.Bind()
+
+        # modelMatrices = glm.array.zeros(len(models), glm.mat4)
+        # for i, m in enumerate(models):
+        #     modelMatrices[i] = m
+
+        # self.modelMatrixBuffer = NVertexBufferObject()
+        # self.modelMatrixBuffer.Bind()
+        # self.modelMatrixBuffer.BufferData(modelMatrices.nbytes, modelMatrices.ptr)
+        # glEnableVertexAttribArray(5)
+        # glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(0))
+        # glEnableVertexAttribArray(6)
+        # glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(glm.sizeof(glm.vec4)))
+        # glEnableVertexAttribArray(7)
+        # glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(2 * glm.sizeof(glm.vec4)))
+        # glEnableVertexAttribArray(8)
+        # glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, glm.sizeof(glm.mat4), ctypes.c_void_p(3 * glm.sizeof(glm.vec4)))
+        # glVertexAttribDivisor(5, 1)
+        # glVertexAttribDivisor(6, 1)
+        # glVertexAttribDivisor(7, 1)
+        # glVertexAttribDivisor(8, 1)
+
+        material.Use()
+        material.GetShader().UniformMatrix4fv("projection", glm.value_ptr(projection))
+        material.GetShader().UniformMatrix4fv("view", glm.value_ptr(view))
+        glDrawElementsInstanced(GL_TRIANGLES, len(self.indices), GL_UNSIGNED_INT, None, len(self.instanceTransforms))
+        material.Unuse()
+
+        # self.vertexBuffer.Unbind()
+        # self.normalBuffer.Unbind()
+        # self.uvBuffer.Unbind()
+        # self.colorBuffer.Unbind()
+        # self.indexBuffer.Unbind()
+        
+        self.vertexArrayObject.Unbind()
+
+    def InitializeCube(self, size = 1.0):
         self.vertices = [
-            -0.5, -0.5,  0.5,
-             0.5, -0.5,  0.5,
-             0.5,  0.5,  0.5,
-            -0.5,  0.5,  0.5,
+            -0.5 * size, -0.5 * size,  0.5 * size,
+             0.5 * size, -0.5 * size,  0.5 * size,
+             0.5 * size,  0.5 * size,  0.5 * size,
+            -0.5 * size,  0.5 * size,  0.5 * size,
 
-            -0.5, -0.5, -0.5,
-             0.5, -0.5, -0.5,
-             0.5,  0.5, -0.5,
-            -0.5,  0.5, -0.5,
+            -0.5 * size, -0.5 * size, -0.5 * size,
+             0.5 * size, -0.5 * size, -0.5 * size,
+             0.5 * size,  0.5 * size, -0.5 * size,
+            -0.5 * size,  0.5 * size, -0.5 * size,
 
-             0.5, -0.5, -0.5,
-             0.5,  0.5, -0.5,
-             0.5,  0.5,  0.5,
-             0.5, -0.5,  0.5,
+             0.5 * size, -0.5 * size, -0.5 * size,
+             0.5 * size,  0.5 * size, -0.5 * size,
+             0.5 * size,  0.5 * size,  0.5 * size,
+             0.5 * size, -0.5 * size,  0.5 * size,
 
-            -0.5,  0.5, -0.5,
-            -0.5, -0.5, -0.5,
-            -0.5, -0.5,  0.5,
-            -0.5,  0.5,  0.5,
+            -0.5 * size,  0.5 * size, -0.5 * size,
+            -0.5 * size, -0.5 * size, -0.5 * size,
+            -0.5 * size, -0.5 * size,  0.5 * size,
+            -0.5 * size,  0.5 * size,  0.5 * size,
 
-            -0.5, -0.5, -0.5,
-             0.5, -0.5, -0.5,
-             0.5, -0.5,  0.5,
-            -0.5, -0.5,  0.5,
+            -0.5 * size, -0.5 * size, -0.5 * size,
+             0.5 * size, -0.5 * size, -0.5 * size,
+             0.5 * size, -0.5 * size,  0.5 * size,
+            -0.5 * size, -0.5 * size,  0.5 * size,
 
-             0.5,  0.5, -0.5,
-            -0.5,  0.5, -0.5,
-            -0.5,  0.5,  0.5,
-             0.5,  0.5,  0.5]
+             0.5 * size,  0.5 * size, -0.5 * size,
+            -0.5 * size,  0.5 * size, -0.5 * size,
+            -0.5 * size,  0.5 * size,  0.5 * size,
+             0.5 * size,  0.5 * size,  0.5 * size]
 
         self.normals = [
             0.0, 0.0, 1.0,
@@ -240,12 +315,14 @@ class NGeometry():
             16, 17, 18, 18, 19, 16,
             20, 21, 22, 22, 23, 20]
 
-    def InitializePlane(self):
+        self.BuildRenderData()
+
+    def InitializePlane(self, size = 1.0):
         self.vertices = [
-            -0.5, -0.5,  0.0,
-             0.5, -0.5,  0.0,
-             0.5,  0.5,  0.0,
-            -0.5,  0.5,  0.0]
+            -0.5 * size, -0.5 * size,  0.0,
+             0.5 * size, -0.5 * size,  0.0,
+             0.5 * size,  0.5 * size,  0.0,
+            -0.5 * size,  0.5 * size,  0.0]
 
         self.normals = [
             0.0, 0.0, 1.0,
@@ -266,3 +343,5 @@ class NGeometry():
             1.0, 1.0, 1.0, 1.0]
 
         self.indices = [0,  1,  2,  2,  3,  0]
+
+        self.BuildRenderData()

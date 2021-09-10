@@ -1,9 +1,14 @@
 from .NCommon import *
 
+from .NRenderer import *
+
 from .NScene import *
 from .NSceneLayer import *
 from .NSceneNode import *
 from .NSceneNodeCamera import *
+from .NSceneNodeInstancing import *
+
+from .NCameraManipulator import *
 
 from .NGeometry import *
 from .NVertexArrayObject import *
