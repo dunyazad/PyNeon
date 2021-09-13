@@ -137,46 +137,50 @@ sceneNodeCube3.AddRenderData(material_cube3, geometryPlane)
 sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 
 
-instancedCubeMaterial = NMaterial()
+tMaterial = NMaterial()
+tShader = NShader(open("shaders/geometry_shader.vs"), open("shaders/geometry_shader.fs"), open("shaders/geometry_shader.gs"))
+tMaterial.SetShader(tShader)
 
-instancedShader = NShader(open("shaders/instanced.vs"), open("shaders/instanced.fs"))
-instancedCubeMaterial.SetShader(instancedShader)
+tGeometry = NGeometry()
+tGeometry.SetDrawingMode(GL_POINTS)
+tGeometry.AddVertex(glm.vec3(0, 0, 0))
+tGeometry.AddVertex(glm.vec3(1, 0, 0))
+tGeometry.AddVertex(glm.vec3(1, 1, 0))
+tGeometry.AddVertex(glm.vec3(0, 1, 0))
+tGeometry.BuildRenderData()
 
-crateTexture = NTexture()
-crateTexture.LoadFromFile("textures/crate.jpg")
-instancedCubeMaterial.SetTexture(crateTexture)
+tNode = sceneLayer.CreateSceneNode("tNode")
+tNode.AddRenderData(tMaterial, tGeometry)
 
-# instancedCube = NGeometry()
-# instancedCube.InitializeCube(1)
 
-# instancedCubeSceneNodes = sceneLayer.CreateSceneNodeInstancing("instacing")
-# instancedCubeSceneNodes.AddRenderData(instancedCubeMaterial, instancedCube)
+# instancedCubeMaterial = NMaterial()
 
-# instancedCube1 = NGeometry()
-# instancedCube1.InitializeCube(1)
+# instancedShader = NShader(open("shaders/instanced.vs"), open("shaders/instanced.fs"))
+# instancedCubeMaterial.SetShader(instancedShader)
 
-# instancedCubeSceneNodes1 = sceneLayer.CreateSceneNodeInstancing("instacing1")
-# instancedCubeSceneNodes1.AddRenderData(instancedCubeMaterial, instancedCube1)
+# crateTexture = NTexture()
+# crateTexture.LoadFromFile("textures/crate.jpg")
+# instancedCubeMaterial.SetTexture(crateTexture)
 
-for rr in range(2):
-    for cc in range(2):
-        for ll in range(2):
-            instancedCube = NGeometry()
-            instancedCube.InitializeCube(1)
+# for rr in range(2):
+#     for cc in range(2):
+#         for ll in range(2):
+#             instancedCube = NGeometry()
+#             instancedCube.InitializeCube(1)
 
-            instancedCubeSceneNodes = sceneLayer.CreateSceneNodeInstancing("instacing" + str(rr) + ", " + str(cc) + ", " + str(ll))
-            instancedCubeSceneNodes.AddRenderData(instancedCubeMaterial, instancedCube)
+#             instancedCubeSceneNodes = sceneLayer.CreateSceneNodeInstancing("instacing" + str(rr) + ", " + str(cc) + ", " + str(ll))
+#             instancedCubeSceneNodes.AddRenderData(instancedCubeMaterial, instancedCube)
 
-            rows = 32
-            columns = 32
-            layers = 32
-            for r in range(rows):
-                for c in range(columns):
-                    for l in range(layers):
-                        # cube = sceneLayer.CreateSceneNode("cube[" + str(r) + "," + str(c) + "]")
-                        # cube.AddRenderData(instancedCubeMaterial, instancedCube)
-                        # cube.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, -0.5, r - rows * 0.5)))
-                        instancedCubeSceneNodes.AddTransform(glm.translate(glm.mat4(1), glm.vec3(rr * 32, ll * 32, cc * 32)) * glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, l - layers * 0.5, r - rows * 0.5)))
+#             rows = 32
+#             columns = 32
+#             layers = 32
+#             for r in range(rows):
+#                 for c in range(columns):
+#                     for l in range(layers):
+#                         # cube = sceneLayer.CreateSceneNode("cube[" + str(r) + "," + str(c) + "]")
+#                         # cube.AddRenderData(instancedCubeMaterial, instancedCube)
+#                         # cube.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, -0.5, r - rows * 0.5)))
+#                         instancedCubeSceneNodes.AddTransform(glm.translate(glm.mat4(1), glm.vec3(rr * 32, ll * 32, cc * 32)) * glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, l - layers * 0.5, r - rows * 0.5)))
 
 glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)

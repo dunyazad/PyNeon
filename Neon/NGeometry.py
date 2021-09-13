@@ -17,6 +17,10 @@ class NGeometry():
         self.uvBuffer = None
         self.colorBuffer = None
         self.indexBuffer = None
+        self.drawingMode = GL_TRIANGLES
+
+    def AddVertex(self, vertex):
+        self.vertices.append(vertex)
 
     def SetVertices(self, vertices):
         self.vertices = vertices
@@ -32,6 +36,9 @@ class NGeometry():
 
     def SetIndices(self, indices):
         self.indices = indices
+
+    def SetDrawingMode(self, drawingMode):
+        self.drawingMode = drawingMode
 
     def SetInstanceTransforms(self, transforms):
         self.instanceTransforms = glm.array.zeros(len(transforms), glm.mat4)
@@ -116,7 +123,14 @@ class NGeometry():
         material.GetShader().UniformMatrix4fv("projection", glm.value_ptr(projection))
         material.GetShader().UniformMatrix4fv("view", glm.value_ptr(view))
         material.GetShader().UniformMatrix4fv("model", glm.value_ptr(model))
-        glDrawElements(GL_TRIANGLES, len(self.indices), GL_UNSIGNED_INT, None)
+        material.GetShader().UniformMatrix4fv("vp", glm.value_ptr(projection * view))
+        if len(self.indices) != 0:
+            glDrawElements(self.drawingMode, len(self.indices), GL_UNSIGNED_INT, None)
+        else:
+            if self.drawingMode == GL_POINTS:
+                glDrawArrays(self.drawingMode, 0, len(self.vertices))
+            elif self.drawingMode == GL_TRIANGLES:
+                glDrawArrays(self.drawingMode, 0, len(self.vertices) / 3)
         material.Unuse()
 
         # self.vertexBuffer.Unbind()
@@ -171,7 +185,7 @@ class NGeometry():
         material.Use()
         material.GetShader().UniformMatrix4fv("projection", glm.value_ptr(projection))
         material.GetShader().UniformMatrix4fv("view", glm.value_ptr(view))
-        glDrawElementsInstanced(GL_TRIANGLES, len(self.indices), GL_UNSIGNED_INT, None, len(self.instanceTransforms))
+        glDrawElementsInstanced(self.drawingMode, len(self.indices), GL_UNSIGNED_INT, None, len(self.instanceTransforms))
         material.Unuse()
 
         # self.vertexBuffer.Unbind()

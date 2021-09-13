@@ -1,10 +1,14 @@
 from .NCommon import *
 
 class NShader():
-    def __init__(self, vertexShaderCode, fragmentShaderCode) -> None:
+    def __init__(self, vertexShaderCode, fragmentShaderCode, geometryShaderCode = None) -> None:
         vs = compileShader(vertexShaderCode, GL_VERTEX_SHADER)
         fs = compileShader(fragmentShaderCode, GL_FRAGMENT_SHADER)
-        self.shaderObject = compileProgram(vs, fs)
+        if geometryShaderCode is not None:
+            gs = compileShader(geometryShaderCode, GL_GEOMETRY_SHADER)
+            self.shaderObject = compileProgram(vs, fs, gs)
+        else:
+            self.shaderObject = compileProgram(vs, fs)
         self.uniforms = {}
     
     def GetShaderObject(self):
