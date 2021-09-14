@@ -144,13 +144,14 @@ tMaterial.SetShader(tShader)
 tGeometry = NGeometry()
 tGeometry.SetDrawingMode(GL_POINTS)
 tGeometry.AddVertex(glm.vec3(0, 0, 0))
-tGeometry.AddVertex(glm.vec3(1, 0, 0))
-tGeometry.AddVertex(glm.vec3(1, 1, 0))
-tGeometry.AddVertex(glm.vec3(0, 1, 0))
+# tGeometry.AddVertex(glm.vec3(1, 0, 0))
+# tGeometry.AddVertex(glm.vec3(1, 1, 0))
+# tGeometry.AddVertex(glm.vec3(0, 1, 0))
 tGeometry.BuildRenderData()
 
 tNode = sceneLayer.CreateSceneNode("tNode")
 tNode.AddRenderData(tMaterial, tGeometry)
+tNode.SetLocalTransform(glm.mat4())
 
 
 # instancedCubeMaterial = NMaterial()

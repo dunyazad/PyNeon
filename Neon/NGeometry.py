@@ -123,7 +123,6 @@ class NGeometry():
         material.GetShader().UniformMatrix4fv("projection", glm.value_ptr(projection))
         material.GetShader().UniformMatrix4fv("view", glm.value_ptr(view))
         material.GetShader().UniformMatrix4fv("model", glm.value_ptr(model))
-        material.GetShader().UniformMatrix4fv("vp", glm.value_ptr(projection * view))
         if len(self.indices) != 0:
             glDrawElements(self.drawingMode, len(self.indices), GL_UNSIGNED_INT, None)
         else:
