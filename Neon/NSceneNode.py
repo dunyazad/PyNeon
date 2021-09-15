@@ -8,6 +8,7 @@ class NSceneNode():
         self.renderDatas = []
         self.parent = None
         self.children = []
+        self.transformDirty = True
         self.localTransform = glm.mat4(1)
         self.absoluteTransform = glm.mat4(1)
 
@@ -45,6 +46,7 @@ class NSceneNode():
         return self.localTransform
 
     def SetLocalTransform(self, m):
+        self.transformDirty = True
         self.localTransform = m
 
     def GetAbsoluteTransform(self):
@@ -52,9 +54,11 @@ class NSceneNode():
 
     def Update(self, timeDelta):
         if self.parent is None:
-            self.absoluteTransform = self.localTransform
+            if self.transformDirty:
+                self.absoluteTransform = self.localTransform
         else:
-            self.absoluteTransform = self.parent.absoluteTransform * self.localTransform
+            if self.parent.transformDirty != False or self.transformDirty:
+                self.absoluteTransform = self.parent.absoluteTransform * self.localTransform
 
         for child in self.children:
             child.Update(timeDelta)

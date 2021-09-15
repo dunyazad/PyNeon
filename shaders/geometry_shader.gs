@@ -1,6 +1,7 @@
 #version 330 core
 #extension GL_ARB_geometry_shader4 : enable
 layout (points) in;
+// layout (invocations = num_instances) in;
 layout (triangle_strip, max_vertices = 24) out;
 
 uniform mat4 projection;
