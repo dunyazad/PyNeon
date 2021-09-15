@@ -140,18 +140,25 @@ sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 tMaterial = NMaterial()
 tShader = NShader(open("shaders/geometry_shader.vs"), open("shaders/geometry_shader.fs"), open("shaders/geometry_shader.gs"))
 tMaterial.SetShader(tShader)
+tMaterial.SetTexture(texture_cube1)
 
 tGeometry = NGeometry()
 tGeometry.SetDrawingMode(GL_POINTS)
-tGeometry.AddVertex(glm.vec3(0, 0, 0))
-# tGeometry.AddVertex(glm.vec3(1, 0, 0))
-# tGeometry.AddVertex(glm.vec3(1, 1, 0))
-# tGeometry.AddVertex(glm.vec3(0, 1, 0))
+rows = 1000
+columns = 1000
+layers = 1
+for r in range(rows):
+    for c in range(columns):
+        for l in range(layers):
+            tGeometry.AddVertex(glm.vec3(r, l, c))
 tGeometry.BuildRenderData()
 
-tNode = sceneLayer.CreateSceneNode("tNode")
-tNode.AddRenderData(tMaterial, tGeometry)
-tNode.SetLocalTransform(glm.mat4())
+for r in range(3):
+    for c in range(3):
+        for l in range(3):
+            node = sceneLayer.CreateSceneNode("tNode" + str(r) + str(c) + str(l))
+            node.AddRenderData(tMaterial, tGeometry)
+            node.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(r * 1000, l * 1, c * 1000)))
 
 
 # instancedCubeMaterial = NMaterial()
@@ -187,6 +194,10 @@ glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)
 glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+glEnable(GL_CULL_FACE)
+glCullFace(GL_BACK)
+# glFrontFace(GL_CCW)
 
 now = time.time_ns()
 lastTime = time.time_ns()
