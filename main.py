@@ -69,7 +69,7 @@ if not glfw.init():
 glfw.window_hint(glfw.SAMPLES, 8)
 
 # creating the window
-window = glfw.create_window(1280, 720, "Neon window", None, None)
+window = glfw.create_window(2560, 1440, "Neon window", None, None)
 
 # check if window was created
 if not window:
@@ -142,15 +142,36 @@ tShader = NShader(open("shaders/geometry_shader.vs"), open("shaders/geometry_sha
 tMaterial.SetShader(tShader)
 tMaterial.SetTexture(texture_cube1)
 
+shape = (1024,1024)
+scale = 100
+octaves = 6
+persistence = 0.5
+lacunarity = 2.0
+seed = np.random.randint(0,100)
+seed = 126
+
+world = np.zeros(shape)
+for i in range(shape[0]):
+    for j in range(shape[1]):
+        world[i][j] = noise.pnoise2(i/scale, 
+                                    j/scale, 
+                                    octaves=octaves, 
+                                    persistence=persistence, 
+                                    lacunarity=lacunarity, 
+                                    repeatx=1024, 
+                                    repeaty=1024, 
+                                    base=seed)
+
 tGeometry = NGeometry()
 tGeometry.SetDrawingMode(GL_POINTS)
-rows = 1000
-columns = 1000
+rows = 1024
+columns = 1024
 layers = 1
 for r in range(rows):
     for c in range(columns):
         for l in range(layers):
-            tGeometry.AddVertex(glm.vec3(r, l, c))
+            nl = math.floor(world[r][c] * 50)
+            tGeometry.AddVertex(glm.vec3(r, nl, c))
 tGeometry.BuildRenderData()
 
 for r in range(3):
@@ -161,6 +182,7 @@ for r in range(3):
             node.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(r * 1000, l * 1, c * 1000)))
 
 
+# Instancing ==>>
 # instancedCubeMaterial = NMaterial()
 
 # instancedShader = NShader(open("shaders/instanced.vs"), open("shaders/instanced.fs"))
@@ -189,6 +211,7 @@ for r in range(3):
 #                         # cube.AddRenderData(instancedCubeMaterial, instancedCube)
 #                         # cube.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, -0.5, r - rows * 0.5)))
 #                         instancedCubeSceneNodes.AddTransform(glm.translate(glm.mat4(1), glm.vec3(rr * 32, ll * 32, cc * 32)) * glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, l - layers * 0.5, r - rows * 0.5)))
+# <<== Instancing
 
 glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)

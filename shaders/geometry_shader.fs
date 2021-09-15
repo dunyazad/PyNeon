@@ -1,5 +1,7 @@
 # version 330
 in vec2 TexCoords;
+in vec3 Normal;
+
 out vec4 out_color;
 uniform sampler2D s_texture;
 void main()
