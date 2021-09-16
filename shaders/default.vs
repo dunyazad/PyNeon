@@ -7,6 +7,8 @@ layout(location = 4) in vec3 a_color;
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
+uniform vec3 viewPos;
+uniform vec3 lightPos;
 out vec3 v_color;
 out vec2 v_uv;
 void main()

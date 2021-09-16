@@ -26,6 +26,12 @@ class NShader():
 
         return self.uniforms[uniformName]
 
+    def Uniform3f(self, uniformName, v):
+        location = self.GetUniformLocation(uniformName)
+        if location != -1:
+            glUniform3f(location, v.x, v.y, v.z)
+
     def UniformMatrix4fv(self, uniformName, m):
         location = self.GetUniformLocation(uniformName)
-        glUniformMatrix4fv(location, 1, False, m)
+        if location != -1:
+            glUniformMatrix4fv(location, 1, False, m)

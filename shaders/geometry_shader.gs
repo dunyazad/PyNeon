@@ -8,14 +8,16 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
+out vec3 FragPos;
 out vec2 TexCoords;
 out vec3 Normal;
 
 void GenerateVertex(in vec4 offset, in vec3 normal, in vec2 uv) {
     vec4 vertexPos = offset + gl_in[0].gl_Position;
     gl_Position = projection * view * model * vertexPos;
+    FragPos = vec3(view * model * vertexPos);
     TexCoords = uv;
-    Normal = normal;
+    Normal = vec3(view * model * vec4(normal, 0.0));
     EmitVertex();
 }
 
