@@ -137,10 +137,12 @@ sceneNodeCube3.AddRenderData(material_cube3, geometryPlane)
 sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 
 
-tMaterial = NMaterial()
-tShader = NShader(open("shaders/geometry_shader.vs"), open("shaders/geometry_shader.fs"), open("shaders/geometry_shader.gs"))
-tMaterial.SetShader(tShader)
-tMaterial.SetTexture(texture_cube1)
+cubeMaterial = NMaterial()
+cubeShader = NShader(open("shaders/geometry_shader.vs"), open("shaders/geometry_shader.fs"), open("shaders/geometry_shader.gs"))
+cubeMaterial.SetShader(cubeShader)
+cubeTexture = NTexture()
+cubeTexture.LoadFromFile("textures/paper.png")
+cubeMaterial.SetTexture(cubeTexture)
 
 shape = (1024,1024)
 scale = 100
@@ -162,8 +164,8 @@ for i in range(shape[0]):
                                     repeaty=1024, 
                                     base=seed)
 
-tGeometry = NGeometry()
-tGeometry.SetDrawingMode(GL_POINTS)
+cubeGeometry = NGeometry()
+cubeGeometry.SetDrawingMode(GL_POINTS)
 rows = 1024
 columns = 1024
 layers = 1
@@ -171,14 +173,14 @@ for r in range(rows):
     for c in range(columns):
         for l in range(layers):
             nl = math.floor(world[r][c] * 50)
-            tGeometry.AddVertex(glm.vec3(r, nl, c))
-tGeometry.BuildRenderData()
+            cubeGeometry.AddVertex(glm.vec3(r, nl, c))
+cubeGeometry.BuildRenderData()
 
 for r in range(3):
     for c in range(3):
         for l in range(3):
-            node = sceneLayer.CreateSceneNode("tNode" + str(r) + str(c) + str(l))
-            node.AddRenderData(tMaterial, tGeometry)
+            node = sceneLayer.CreateSceneNode("cubeNode" + str(r) + str(c) + str(l))
+            node.AddRenderData(cubeMaterial, cubeGeometry)
             node.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(r * 1000, l * 1, c * 1000)))
 
 
