@@ -141,16 +141,18 @@ sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 
 
 stlLoader = STLFileLoader()
-vertices, normals, indices = stlLoader.Load("./model files/Cat/Cat ASCII.stl")
+vertices, normals, colors, indices = stlLoader.Load("./model files/Cat/Cat ASCII.stl", glm.vec3(0.0001, 0.0001, 0.0001))
 
 geometryCat = NGeometry()
 geometryCat.SetVertices(vertices)
 geometryCat.SetNormals(normals)
+geometryCat.SetColors(colors)
 geometryCat.SetIndices(indices)
 geometryCat.BuildRenderData()
 cat = sceneLayer.CreateSceneNode("cat")
+coloredShader = NShader(open("shaders/colored.vs"), open("shaders/colored.fs"))
 material_cat = NMaterial()
-material_cat.SetShader(defaultShader)
+material_cat.SetShader(coloredShader)
 cat.AddRenderData(material_cat, geometryCat)
 
 glClearColor(0, 0.1, 0.1, 1)
