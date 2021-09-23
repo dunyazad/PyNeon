@@ -4,6 +4,8 @@ from Neon.Neon import *
 
 from TextureLoader import load_texture
 
+from STLFileLoader import STLFileLoader
+
 cameraManipulator = None
 
 # glfw callback functions
@@ -138,20 +140,18 @@ sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 
 
 
+stlLoader = STLFileLoader()
+vertices, normals, indices = stlLoader.Load("./model files/Cat/Cat ASCII.stl")
 
-isASCII = False
-f = open("./model files/Cat/Cat ASCII.stl")
-
-line = f.readline()
-words = line.split()
-if words[0] == "solid":
-    isASCII = True
-else:
-    isASCII = False
-f.close()
-
-
-
+geometryCat = NGeometry()
+geometryCat.SetVertices(vertices)
+geometryCat.SetNormals(normals)
+geometryCat.SetIndices(indices)
+geometryCat.BuildRenderData()
+cat = sceneLayer.CreateSceneNode("cat")
+material_cat = NMaterial()
+material_cat.SetShader(defaultShader)
+cat.AddRenderData(material_cat, geometryCat)
 
 glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)

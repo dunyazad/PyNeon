@@ -70,33 +70,38 @@ class NGeometry():
         self.vertexArrayObject = NVertexArrayObject()
         self.vertexArrayObject.Bind()
 
-        self.vertexBuffer = NVertexBufferObject()
-        self.vertexBuffer.Bind()
-        self.vertexBuffer.BufferData(vertices.nbytes, vertices)
-        glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+        if len(vertices) > 0:
+            self.vertexBuffer = NVertexBufferObject()
+            self.vertexBuffer.Bind()
+            self.vertexBuffer.BufferData(vertices.nbytes, vertices)
+            glEnableVertexAttribArray(0)
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
 
-        self.normalBuffer = NVertexBufferObject()
-        self.normalBuffer.Bind()
-        self.normalBuffer.BufferData(normals.nbytes, normals)
-        glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+        if len(normals) > 0:
+            self.normalBuffer = NVertexBufferObject()
+            self.normalBuffer.Bind()
+            self.normalBuffer.BufferData(normals.nbytes, normals)
+            glEnableVertexAttribArray(1)
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
 
-        self.uvBuffer = NVertexBufferObject()
-        self.uvBuffer.Bind()
-        self.uvBuffer.BufferData(uvs.nbytes, uvs)
-        glEnableVertexAttribArray(2)
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+        if len(uvs) > 0:
+            self.uvBuffer = NVertexBufferObject()
+            self.uvBuffer.Bind()
+            self.uvBuffer.BufferData(uvs.nbytes, uvs)
+            glEnableVertexAttribArray(2)
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
 
-        self.colorBuffer = NVertexBufferObject()
-        self.colorBuffer.Bind()
-        self.colorBuffer.BufferData(colors.nbytes, colors)
-        glEnableVertexAttribArray(3)
-        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
+        if len(colors) > 0:
+            self.colorBuffer = NVertexBufferObject()
+            self.colorBuffer.Bind()
+            self.colorBuffer.BufferData(colors.nbytes, colors)
+            glEnableVertexAttribArray(3)
+            glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
 
-        self.indexBuffer = NElementBufferObject()
-        self.indexBuffer.Bind()
-        self.indexBuffer.BufferData(indices.nbytes, indices)
+        if len(indices) > 0:
+            self.indexBuffer = NElementBufferObject()
+            self.indexBuffer.Bind()
+            self.indexBuffer.BufferData(indices.nbytes, indices)
 
     def Draw(self, material, projection, view, model):
         self.vertexArrayObject.Bind()
