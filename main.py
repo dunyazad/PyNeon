@@ -137,83 +137,21 @@ sceneNodeCube3.AddRenderData(material_cube3, geometryPlane)
 sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 
 
-cubeMaterial = NMaterial()
-cubeShader = NShader(open("shaders/geometry_shader.vs"), open("shaders/geometry_shader.fs"), open("shaders/geometry_shader.gs"))
-cubeMaterial.SetShader(cubeShader)
-cubeTexture = NTexture()
-cubeTexture.LoadFromFile("textures/paper.png")
-cubeMaterial.SetTexture(cubeTexture)
-
-shape = (1024,1024)
-scale = 100
-octaves = 6
-persistence = 0.5
-lacunarity = 2.0
-seed = np.random.randint(0,100)
-seed = 126
-
-world = np.zeros(shape)
-for i in range(shape[0]):
-    for j in range(shape[1]):
-        world[i][j] = noise.pnoise2(i/scale, 
-                                    j/scale, 
-                                    octaves=octaves, 
-                                    persistence=persistence, 
-                                    lacunarity=lacunarity, 
-                                    repeatx=1024, 
-                                    repeaty=1024, 
-                                    base=seed)
-
-cubeGeometry = NGeometry()
-cubeGeometry.SetDrawingMode(GL_POINTS)
-rows = 1024
-columns = 1024
-layers = 1
-for r in range(rows):
-    for c in range(columns):
-        for l in range(layers):
-            nl = math.floor(world[r][c] * 50)
-            cubeGeometry.AddVertex(glm.vec3(r, nl, c))
-cubeGeometry.BuildRenderData()
-
-for r in range(3):
-    for c in range(3):
-        for l in range(3):
-            node = sceneLayer.CreateSceneNode("cubeNode" + str(r) + str(c) + str(l))
-            node.AddRenderData(cubeMaterial, cubeGeometry)
-            node.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(r * 1000, l * 1, c * 1000)))
 
 
-# Instancing ==>>
-# instancedCubeMaterial = NMaterial()
+isASCII = False
+f = open("./model files/Cat/Cat ASCII.stl")
 
-# instancedShader = NShader(open("shaders/instanced.vs"), open("shaders/instanced.fs"))
-# instancedCubeMaterial.SetShader(instancedShader)
+line = f.readline()
+words = line.split()
+if words[0] == "solid":
+    isASCII = True
+else:
+    isASCII = False
+f.close()
 
-# crateTexture = NTexture()
-# crateTexture.LoadFromFile("textures/crate.jpg")
-# instancedCubeMaterial.SetTexture(crateTexture)
 
-# for rr in range(2):
-#     for cc in range(2):
-#         for ll in range(2):
-#             instancedCube = NGeometry()
-#             instancedCube.InitializeCube(1)
 
-#             instancedCubeSceneNodes = sceneLayer.CreateSceneNodeInstancing("instacing" + str(rr) + ", " + str(cc) + ", " + str(ll))
-#             instancedCubeSceneNodes.AddRenderData(instancedCubeMaterial, instancedCube)
-
-#             rows = 32
-#             columns = 32
-#             layers = 32
-#             for r in range(rows):
-#                 for c in range(columns):
-#                     for l in range(layers):
-#                         # cube = sceneLayer.CreateSceneNode("cube[" + str(r) + "," + str(c) + "]")
-#                         # cube.AddRenderData(instancedCubeMaterial, instancedCube)
-#                         # cube.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, -0.5, r - rows * 0.5)))
-#                         instancedCubeSceneNodes.AddTransform(glm.translate(glm.mat4(1), glm.vec3(rr * 32, ll * 32, cc * 32)) * glm.translate(glm.mat4(), glm.vec3(c - columns * 0.5, l - layers * 0.5, r - rows * 0.5)))
-# <<== Instancing
 
 glClearColor(0, 0.1, 0.1, 1)
 glEnable(GL_DEPTH_TEST)
