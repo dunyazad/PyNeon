@@ -141,7 +141,9 @@ sceneNodeCube3.SetLocalTransform(glm.translate(glm.mat4(), glm.vec3(0, 1, -3)))
 
 
 stlLoader = STLFileLoader()
-vertices, normals, colors, indices = stlLoader.Load("./model files/Cat/Cat ASCII.stl", glm.vec3(0.0001, 0.0001, 0.0001))
+transform = glm.rotate(glm.mat4(), glm.radians(-90), glm.vec3(1, 0, 0))
+transform = glm.scale(transform, glm.vec3(0.0001, 0.0001, 0.0001))
+vertices, normals, colors, indices = stlLoader.Load("./model files/Cat/Cat ASCII.stl", transform)
 
 geometryCat = NGeometry()
 geometryCat.SetVertices(vertices)
